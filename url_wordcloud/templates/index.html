@@ -3,3 +3,42 @@
 
 {% block title %}URL WORDCLOUD{% end %}
 
+
+{% block home_selected %} pure-menu-selected{% end %}
+
+
+{% block content %}
+
+<div class="splash-container">
+    <div class="splash">
+        <h1 class="splash-head">URL Wordcloud</h1>
+        <p class="splash-subhead">
+            A place to generate.
+        </p>
+        <form class="pure-form" id="urlform">
+        <fieldset>
+            <legend>Please enter your URL</legend>
+            <label for="url_for_wordcloud">
+                <input type="text" placeholder="URL" id="url_for_wordcloud">
+            </label>
+            <button type="submit" class="pure-button pure-button-primary">{{ _("Generate WordCloud") }}</button>
+            <p class="description" id="websocket_connection"><i class="far fa-check-square"></i> Connecting</p>
+        </fieldset>
+        {% module xsrf_form_html() %}
+        </form>
+    </div>
+</div>
+
+<div class="content-wrapper">
+
+</div>
+
+<script
+      src="https://code.jquery.com/jquery-3.3.1.min.js"
+      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+      crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="{{ static_url("js/vendor/jquery-3.3.1.min.js") }}">\x3C/script>')</script>
+    <script>window.jQuery || document.write('<script src="{{ static_url("js/vendor/modernizr-3.6.0.min.js") }}">\x3C/script>')</script>
+    <script src="{{ static_url("js/main.js") }}" type="text/javascript"></script>
+    <script src="{{ static_url("js/plugins.js") }}" type="text/javascript"></script>
+{% end %}
