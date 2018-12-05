@@ -1,0 +1,20 @@
+# Considered pypy base docker image
+# and also the Phusion base image and passenger images
+# with more research, i'd probably use one of these instead of the standard python image
+FROM python:3.6
+
+# install netcat for the wait-for command in docker-compose file
+RUN apt-get update && apt-get install -y netcat
+
+RUN mkdir /code
+
+WORKDIR /code
+
+ADD . /code/
+
+RUN pip install -r requirements.txt
+
+COPY ./entrypoint.sh /usr/bin/entrypoint.sh
+ENTRYPOINT ["/usr/bin/entrypoint.sh"]
+
+

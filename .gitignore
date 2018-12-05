@@ -1,0 +1,17 @@
+# Python
+*.egg-info
+*.egg
+*.py[co]
+.cache
+build
+dist
+
+# Translations
+*.mo
+
+# Testing
+.tox
+
+/venv
+/.eggs
+/.idea
