@@ -22,10 +22,12 @@ define("port", default=8888, help="run on the given port", type=int)
 class Application(tornado.web.Application):
     def __init__(self):
         settings = dict(
+            debug=True,             # NOT FOR PRODUCTION
             cookie_secret="gB9jYwVv0aodH51judoGwroWP",
             template_path=os.path.join(os.path.dirname(__file__), "url_wordcloud", "templates"),
             static_path=os.path.join(os.path.dirname(__file__), "url_wordcloud", "static"),
             xsrf_cookies=True,
+            autoreload=True         # NOT FOR PRODUCTION ?
         )
         super(Application, self).__init__(url_patterns, **settings)
 
