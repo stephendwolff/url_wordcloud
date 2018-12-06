@@ -1,24 +1,24 @@
 import tornado
 
 from tornado.httpclient import AsyncHTTPClient
-from tornado.testing import AsyncTestCase
+from tornado.testing import AsyncTestCase, AsyncHTTPTestCase
+
+from .mixins import HTTPClientMixin
+from url_wordcloud.app import URLWordCloudApplication
 
 
-# This test uses coroutine style.
-class MyTestCase(AsyncTestCase):
+class IndexTestCase(AsyncHTTPTestCase, HTTPClientMixin):
+
+    def get_app(self):
+        return URLWordCloudApplication()
+
     @tornado.testing.gen_test
-    def test_http_fetch(self):
-        client = AsyncHTTPClient()
-        response = yield client.fetch("http://localhost:8888/")
-        # Test contents of response
-        self.assertIn(b"Boilerplate", response.body)
+    def test_home(self):
+        response = yield self.get('/')
+        self.assertTrue(b'URL WORDCLOUD' in response.body)
 
+    @tornado.testing.gen_test
+    def test_admin(self):
+        response = yield self.get('/admin/')
+        self.assertTrue('login' in response.effective_url)
 
-# This test uses argument passing between self.stop and self.wait.
-class MyTestCase2(AsyncTestCase):
-    def test_http_fetch(self):
-        client = AsyncHTTPClient()
-        client.fetch("http://localhost:8888/", self.stop)
-        response = self.wait()
-        # Test contents of response
-        self.assertIn(b"Boilerplate", response.body)
