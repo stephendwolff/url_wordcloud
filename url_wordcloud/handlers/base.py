@@ -49,12 +49,11 @@ class AnalyseURLHandler(tornado.websocket.WebSocketHandler):
             return
 
         # TODO: validate url, ie protocol etc
-
         url_for_wordcloud = parsed["url_for_wordcloud"]
-        http = httpclient.AsyncHTTPClient()
 
         # retrieve the URL asynchronously
         # include a User-Agent, as some servers dislike bots
+        http = httpclient.AsyncHTTPClient()
         response = await http.fetch(url_for_wordcloud, headers={'User-Agent': 'Mozilla/5.0'})
 
         # get words from response body
@@ -67,9 +66,12 @@ class AnalyseURLHandler(tornado.websocket.WebSocketHandler):
             # remove punctuation
             words = re.sub(r'[^\w\s]', '', words)
 
+            # remove line breaks
+            words = re.sub(r"\n|\r", " ", words)
+
             # Try to count the words with a memory efficient iterables approach.
             # map(str.split, page_text) makes a list, items from which are chained together and then counted
-            # TODO get this workig, not just making single characters
+            # TODO get this working, not just making single characters
             # word_frequency_dict = Counter(chain.from_iterable(map(methodcaller("split", " "), words)))
 
             word_frequency_dict = Counter([word for word in words.split(' ')])
