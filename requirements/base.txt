@@ -1,3 +1,20 @@
 tornado==5.1.1
+
+# BeautifulSoup4 for web text scraping.
+# (Consider 'scrapy' for more heavy duty scraping)
 beautifulsoup4==4.6.3
-mysqlclient>=1.3.13,<1.4a0
+
+
+# mysqlclient>=1.3.13,<1.4a0
+
+# natural language processing
+# nltk
+
+# libsodium for cryptographic functions
+pynacl==1.3.0
+
+# async database access
+tornado_sqlalchemy
+
+# database migrations
+alembic==1.0.5

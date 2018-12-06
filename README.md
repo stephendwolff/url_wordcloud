@@ -11,8 +11,6 @@ Set up
 
 
 
-
-
 TODO
 ----
 * Get tox working properly
@@ -23,7 +21,6 @@ Credits
 
 Libraries:
 * BeautifulSoup4
-* requests
 
 
 Tools used in rendering this package:
