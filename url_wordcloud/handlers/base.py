@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import json
 import logging
 import re
 from collections import Counter
@@ -10,12 +11,13 @@ from json import JSONDecodeError
 import tornado.escape
 import tornado.web
 import tornado.websocket
-
-from bs4 import BeautifulSoup
 from tornado import httpclient
 
-# from nltk.corpus import stopwords
+from bs4 import BeautifulSoup
+from tornado_sqlalchemy import SessionMixin, as_future
 
+# from nltk.corpus import stopwords
+from url_wordcloud.models import Word
 
 
 class MainHandler(tornado.web.RequestHandler):
@@ -24,7 +26,7 @@ class MainHandler(tornado.web.RequestHandler):
         self.render('index.html')
 
 
-class AnalyseURLHandler(tornado.websocket.WebSocketHandler):
+class AnalyseURLHandler(SessionMixin, tornado.websocket.WebSocketHandler):
     """
     Websocket handler
 
@@ -58,6 +60,8 @@ class AnalyseURLHandler(tornado.websocket.WebSocketHandler):
 
         # get words from response body
         soup = BeautifulSoup(response.body, 'lxml')
+        word_frequency_dict = {}
+
         if soup:
             # get the title, and all paragraphs (ie ignore script tags etc
             text_tags = soup.body.find_all(['title', 'p'])
@@ -77,10 +81,15 @@ class AnalyseURLHandler(tornado.websocket.WebSocketHandler):
             word_frequency_dict = Counter([word for word in words.split(' ')])
 
             print(word_frequency_dict)
+
+            with self.make_session() as session:
+
+                count = await as_future(session.query(Word).count)
+
+                print('{} words so far!'.format(count))
             # remove articles and prepositions [stop words]
             # stop_words = stopwords.words('english')
             # word_frequency_dict = [word_frequency_dict.pop(k, None) for k in stopwords]
 
-        # store
-        return {'event': 'data'}
 
+        self.write_message(json.dumps(word_frequency_dict))
