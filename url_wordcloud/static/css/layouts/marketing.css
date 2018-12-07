@@ -12,6 +12,7 @@ body {
     line-height: 1.7em;
     color: #7f8c8d;
     font-size: 13px;
+    background: #1f8dd6;
 }
 
 h1,
@@ -132,7 +133,7 @@ a.pure-button-primary {
  */
 
 .splash-container {
-    background: #1f8dd6;
+
     z-index: 1;
     overflow: hidden;
     /* The following styles are required for the "scroll-over" effect */
@@ -140,7 +141,7 @@ a.pure-button-primary {
     height: 100%;
     top: 0;
     left: 0;
-    position: fixed !important;
+    /*position: fixed !important;*/
 }
 
 .splash {
