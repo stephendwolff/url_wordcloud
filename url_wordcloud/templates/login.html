@@ -15,7 +15,7 @@
         <p class="splash-subhead">A place to generate.</p>
         <form class="pure-form" action="/login/" method="post">
         <fieldset>
-            <legend>Please enter your Name</legend>
+            <legend>Please enter your name to enter the admin area</legend>
             <label for="login_name"><input type="text" name="name" id="login_name" placeholder="{{ _("Please enter your name") }}"></label>
             <button type="submit" class="pure-button pure-button-primary">{{ _("Sign in") }}</button>
             {% module xsrf_form_html() %}

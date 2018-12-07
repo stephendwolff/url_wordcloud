@@ -5,21 +5,40 @@
 
 
 {% block home_selected %}{% end %}
-{% block admin_selected %} pure-menu-selected{% end %}
+
+{% block admin_link %}<a href="/logout/" class="pure-menu-link">Logout</a>{% end %}
 
 {% block content %}
 <div class="splash-container">
     <div class="splash">
         <h1 class="splash-head">URL Wordcloud</h1>
-        <p class="splash-subhead">
-            A place to generate.
-        </p>
-        <p>Admin</p>
+        <p class="splash-subhead">A place to generate</p>
+        <form class="pure-form" id="urlform">
+            <fieldset>
+                <legend>Admin</legend>
+            </fieldset>
+        </form>
+
+        <table class="pure-table" id="admin-table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Word</th>
+                <th>Frequency</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="pure-table-odd">
+            <td>1</td>
+            <td>Hey</td>
+            <td>0</td>
+            </tr>
+        </tbody>
+
+
+        </table>
     </div>
-</div>
-
-<div class="content-wrapper">
-
 </div>
 
 <script
