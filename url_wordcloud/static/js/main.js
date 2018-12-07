@@ -51,13 +51,7 @@ var updater = {
         $('#websocket_connection').html('<i class="fas fa-check-square"></i> Connected');
     },
 
-    showWordCloud: function(message) {
-        alert (message);
-        //        var existing = $("#wordcloud");
-//        if (existing.length > 0) return;
-//        var node = $(message.html);
-//        node.hide();
-//        $("#inbox").append(node);
-//        node.slideDown();
+    showWordCloud: function(wordDict) {
+        updateTags(wordDict);
     }
 };
