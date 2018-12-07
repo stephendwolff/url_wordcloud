@@ -6,7 +6,7 @@
 
 {% block home_selected %}{% end %}
 
-{% block admin_link %}<a href="/logout/" class="pure-menu-link">Logout</a>{% end %}
+{% block admin_link %}{{name}}: <a href="/logout/" class="pure-menu-link">Logout</a>{% end %}
 
 {% block content %}
 <div class="splash-container">
@@ -28,12 +28,13 @@
 
             </tr>
         </thead>
-        <tbody>
+        <tbody>{% for idx, word in enumerate(words) %}
             <tr class="pure-table-odd">
-            <td>1</td>
-            <td>Hey</td>
-            <td>0</td>
+            <td>{{ idx +1 }}</td>
+            <td>{{ word.word }}</td>
+            <td>{{ word.frequency }}</td>
             </tr>
+        {% end %}
         </tbody>
 
 
