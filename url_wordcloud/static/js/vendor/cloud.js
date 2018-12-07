@@ -40,7 +40,7 @@ function updateTags(newTags) {
 
 
 function generate() {
-    layout.font("Impact").spiral("archimedean"), fontSize = d3.scale["log"]().range([10, 100]), tags.length && fontSize.domain([+tags[tags.length - 1].value || 1, +tags[0].value]), complete = 0, statusText.style("display", null), words = [], layout.stop().words(tags.slice(0, max = Math.min(tags.length, 250))).start()
+    layout.font("Co-headline").spiral("archimedean"), fontSize = d3.scale["log"]().range([10, 100]), tags.length && fontSize.domain([+tags[tags.length - 1].value || 1, +tags[0].value]), complete = 0, statusText.style("display", null), words = [], layout.stop().words(tags.slice(0, max = Math.min(tags.length, 250))).start()
 }
 
 function progress(t) {
@@ -341,7 +341,7 @@ d3.select("#random-palette").on("click", function () {
         return t + "\xb0"
     });
     var u, i, c, d = Math.PI / 180, h = d3.scale.linear(), f = d3.svg.arc().innerRadius(0).outerRadius(r);
-    t(), parseText(d3.select("#text").property("value"))
+    t(), parseText("")
 }();
 
 //d3.select(window).on("load",  parseText(d3.select("#text").property("value")));

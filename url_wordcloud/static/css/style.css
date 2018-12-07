@@ -1,5 +1,36 @@
+@font-face {
+  font-family: 'Co-headline';
+  src: url("../fonts/CoHeadline-Bold.eot");
+  src: url("../fonts/CoHeadline-Bold.eot?#iefix") format("embedded-opentype"), url("../fonts/CoHeadline-Bold.woff") format("woff"), url("../fonts/CoHeadline-Bold.ttf") format("truetype"), url("../fonts/CoHeadline-Bold.svg") format("svg");
+  font-weight: 700;
+  font-style: normal; }
+
+@font-face {
+  font-family: 'Co-headline';
+  src: url("../fonts/coheadline-regular-webfont.woff2") format("woff2"), url("../fonts/coheadline-regular-webfont.woff") format("woff");
+  font-weight: 400;
+  font-style: normal; }
+
+@font-face {
+  font-family: 'Co-headline';
+  src: url("../fonts/coheadline-light-webfont.woff2") format("woff2"), url("../fonts/coheadline-light-webfont.woff") format("woff");
+  font-weight: 200;
+  font-style: normal; }
+
+
 .description
 {
     color:#fff;
     font-family: inherit;
 }
+
+#admin-table {
+    width:100%;
+
+}
+th{
+    text-align: center;
+}
+
+/* Use Octopus font */
+html{font-family:'Co-headline', sans-serif}
