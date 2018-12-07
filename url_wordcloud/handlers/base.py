@@ -72,14 +72,14 @@ class AnalyseURLHandler(SessionMixin, tornado.websocket.WebSocketHandler):
         [s.extract() for s in soup('script')]
         word_frequency_dict = {}
 
+        # remove script, style and iframe tags
         for script in soup(["script", "style", "iframe"]):
             script.decompose()  # rip it out
 
         # get text
-
         if soup:
-            # get the title, and all paragraphs (ie ignore script tags etc
-            words = soup.get_text()
+            # to lower case
+            words = soup.get_text().lower()
             #text_tags = soup.find_all(['div'])
             #words = ' '.join ([tag.string for tag in text_tags if tag.string is not None]).lower()
 
