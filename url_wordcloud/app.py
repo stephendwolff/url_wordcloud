@@ -10,8 +10,6 @@ from .urls import url_patterns
 class URLWordCloudApplication(tornado.web.Application):
 
     def __init__(self):
-
-
         factory = make_session_factory('mysql+mysqldb://urlwordcloud:urlwordcloud@localhost/urlwordcloud')
 
         # need pool_recycle option if connecting for longer than 8 hours

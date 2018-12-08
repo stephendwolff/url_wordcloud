@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import json
 import logging
+import os
 import re
 from collections import Counter
 from json import JSONDecodeError
@@ -21,15 +22,24 @@ from url_wordcloud.models import Word
 
 # use regular expression to remove common words
 # could use nltk with more time
-from url_wordcloud.utils import salted_hash, aes_encrypted
+from url_wordcloud.utils import salted_hash, asymmetrically_encrypt
 
 STOP_WORDS_PIPED = "i|me|my|myself|we|us|our|ours|ourselves|you|your|yours|yourself|yourselves|he|him|his|himself|she|her|hers|herself|it|its|itself|they|them|their|theirs|themselves|what|which|who|whom|whose|this|that|these|those|am|is|are|was|were|be|been|being|have|has|had|having|do|does|did|doing|will|would|should|can|could|ought|i'm|you're|he's|she's|it's|we're|they're|i've|you've|we've|they've|i'd|you'd|he'd|she'd|we'd|they'd|i'll|you'll|he'll|she'll|we'll|they'll|isn't|aren't|wasn't|weren't|hasn't|haven't|hadn't|doesn't|don't|didn't|won't|wouldn't|shan't|shouldn't|can't|cannot|couldn't|mustn't|let's|that's|who's|what's|here's|there's|when's|where's|why's|how's|a|an|the|and|but|if|or|because|as|until|while|of|at|by|for|with|about|against|between|into|through|during|before|after|above|below|to|from|up|upon|down|in|out|on|off|over|under|again|further|then|once|here|there|when|where|why|how|all|any|both|each|few|more|most|other|some|such|no|nor|not|only|own|same|so|than|too|very|say|says|said|shall"
 STOP_WORDS = STOP_WORDS_PIPED.split('|')
 STOP_WORDS_RE = re.compile(r'\b(' + r'|'.join(STOP_WORDS) + r')\b\s*')
 
+
 class MainHandler(tornado.web.RequestHandler):
+    """
+
+    """
 
     def get(self):
+        """
+        Render the homepage
+
+        :return:
+        """
         self.render('index.html')
 
 
@@ -41,9 +51,25 @@ class AnalyseURLHandler(SessionMixin, tornado.websocket.WebSocketHandler):
 
     TODO: look at reconnection strategies
     """
+    pk = None
 
-    # listen to any messages coming to socket
+    def __init__(self, application, request, **kwargs):
+        pk_path = os.path.join(os.path.dirname(__file__), "..", "..", "public_key")
+
+        with open(pk_path, 'rb') as f:
+            self.pk = f.read()
+
+        super(AnalyseURLHandler, self).__init__(application, request, **kwargs)
+
     async def on_message(self, message):
+        """
+        Listen to any messages coming to socket
+
+        TODO: split up on_message into smaller functional parts
+
+        :param message:
+        :return:
+        """
         logging.info("got message %r", message)
 
         # parse incoming JSON
@@ -120,7 +146,7 @@ class AnalyseURLHandler(SessionMixin, tornado.websocket.WebSocketHandler):
 
                 for word, frequency in top_hundred:
                     pk = salted_hash(word)
-                    encrypted_word = aes_encrypted(word)
+                    encrypted_word = asymmetrically_encrypt(word, self.pk)
 
                     # get word from db in non-blocking fashion
                     db_word = await as_future(session.query(Word).filter_by(pk=pk).first)
@@ -150,9 +176,7 @@ class AnalyseURLHandler(SessionMixin, tornado.websocket.WebSocketHandler):
                 session.commit()
 
             word_frequency_json = json.dumps(word_frequency_dict)
-            logging.info("top_hundred %r", top_hundred)
 
             self.write_message(word_frequency_json)
         else:
             self.write_error("No words found")
-

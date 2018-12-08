@@ -21,8 +21,8 @@ USE `urlwordcloud`;
 DROP TABLE IF EXISTS `words`;
 
 CREATE TABLE `words` (
-  `pk` varchar(100) NOT NULL,
-  `word` varchar(255) NOT NULL DEFAULT '',
+  `pk` varchar(255) NOT NULL,
+  `word` text NOT NULL DEFAULT '',
   `frequency` int(11) unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`pk`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

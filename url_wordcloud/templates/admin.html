@@ -31,8 +31,8 @@
         <tbody>{% for idx, word in enumerate(words) %}
             <tr class="pure-table-odd">
             <td>{{ idx +1 }}</td>
-            <td>{{ word.word }}</td>
-            <td>{{ word.frequency }}</td>
+            <td>{{ word['word'] }}</td>
+            <td>{{ word['frequency'] }}</td>
             </tr>
         {% end %}
         </tbody>
