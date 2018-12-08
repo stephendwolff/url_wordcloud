@@ -6,7 +6,8 @@
 
 {% block home_selected %}{% end %}
 
-{% block admin_link %}{{name}}: <a href="/logout/" class="pure-menu-link">Logout</a>{% end %}
+{% block admin_link %}<a href="/logout/" class="pure-menu-link">Logout</a>{% end %}
+{% block admin_name %}{{name}}:{% end %}
 
 {% block content %}
 <div class="splash-container">
