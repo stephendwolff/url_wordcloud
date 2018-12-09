@@ -28,6 +28,8 @@ STOP_WORDS_PIPED = "i|me|my|myself|we|us|our|ours|ourselves|you|your|yours|yours
 STOP_WORDS = STOP_WORDS_PIPED.split('|')
 STOP_WORDS_RE = re.compile(r'\b(' + r'|'.join(STOP_WORDS) + r')\b\s*')
 
+URL_RE = re.compile(r'^((https?|ftp|smtp):\/\/)?(www.)?[a-z0-9]+\.[a-z]+(\/[a-zA-Z0-9#]+\/?)*')
+
 
 class MainHandler(tornado.web.RequestHandler):
     """
@@ -84,9 +86,19 @@ class AnalyseURLHandler(SessionMixin, tornado.websocket.WebSocketHandler):
         if "url_for_wordcloud" not in parsed:
             return
 
-        # TODO: validate url, ie protocol etc
         url_for_wordcloud = parsed["url_for_wordcloud"]
         logging.info("url_for_wordcloud %r", url_for_wordcloud)
+        if not re.match(URL_RE, url_for_wordcloud):
+            logging.info('invalid URL')
+            # write_error available, with HTTP status codes, not sure with websockets
+            self.write_message(json.dumps({
+                'error': 'invalid URL'
+            }))
+            return
+
+        if not (url_for_wordcloud.startswith('http://') or url_for_wordcloud.startswith('https://')):
+            # assume upgrade to https if available
+            url_for_wordcloud = "{0}".format('http://', url_for_wordcloud)
 
         # retrieve the URL asynchronously
         # include a User-Agent, as some servers dislike bots
@@ -179,4 +191,8 @@ class AnalyseURLHandler(SessionMixin, tornado.websocket.WebSocketHandler):
 
             self.write_message(word_frequency_json)
         else:
-            self.write_error("No words found")
+            logging.info('No words found')
+            # write_error available, with HTTP status codes, not sure with websockets
+            self.write_message(json.dumps({
+                'error': "No words found"
+            }))

@@ -28,6 +28,8 @@ function getCookie(name) {
 
 
 function newURL(form) {
+    $("#spinner").show();
+    $("#sending_error").text('');
     var url_for_wordcloud = $('#url_for_wordcloud').val();
     var urlform = {
         _xsrf: getCookie("_xsrf"),
@@ -44,7 +46,16 @@ var updater = {
         var url = "ws://" + location.host + "/analyse_url/";
         updater.socket = new WebSocket(url);
         updater.socket.onmessage = function(event) {
-            updater.showWordCloud(JSON.parse(event.data));
+            var message = JSON.parse(event.data);
+            var $error_el = $('#sending_error');
+            $("#spinner").hide();
+            if (message.error !== undefined) {
+                $error_el.text(" . . . " + message.error);
+                $error_el.show();
+            } else {
+                $error_el.hide();
+                updater.showWordCloud(message);
+            }
         };
         // show websocket has connected
         // TODO: monitor connection, and replace with 'connecting' if connection disrupted

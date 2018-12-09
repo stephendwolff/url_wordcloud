@@ -14,12 +14,16 @@
         <p class="splash-subhead">A place to generate</p>
         <form class="pure-form" id="urlform">
             <fieldset>
-                <legend>Please enter your URL</legend>
+                <legend>Please enter your URL
+                    <span class="description" id="spinner"> . . . Sending</span>
+                    <span class="description" id="sending_error"> . . . Error</span>
+                </legend>
                 <label for="url_for_wordcloud">
                     <input type="text" placeholder="https://" id="url_for_wordcloud">
                 </label>
                 <button type="submit" class="pure-button pure-button-primary">{{ _("Generate WordCloud") }}</button>
                 <p class="description" id="websocket_connection"><i class="far fa-check-square"></i> Connecting</p>
+
             </fieldset>
 
             {% module xsrf_form_html() %}

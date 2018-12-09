@@ -24,6 +24,16 @@
     font-family: inherit;
 }
 
+.description_float {
+    float:left;
+}
+
+#spinner, #sending_error {
+    color:#fff;
+    font-family: inherit;
+    display: none;
+}
+
 #admin-table {
     width:100%;
 
