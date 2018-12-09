@@ -103,7 +103,14 @@ class AnalyseURLHandler(SessionMixin, tornado.websocket.WebSocketHandler):
         # retrieve the URL asynchronously
         # include a User-Agent, as some servers dislike bots
         http = httpclient.AsyncHTTPClient()
-        response = await http.fetch(url_for_wordcloud, headers={'User-Agent': 'Mozilla/5.0'})
+        try:
+            response = await http.fetch(url_for_wordcloud, headers={'User-Agent': 'Mozilla/5.0'})
+        except Exception as e:
+            logging.error(e)
+            self.write_message(json.dumps({
+                'error': 'exception {0}'.format(e)
+            }))
+            return
 
         # get words from response body
         soup = BeautifulSoup(response.body, 'lxml')
