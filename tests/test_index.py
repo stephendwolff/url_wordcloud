@@ -20,5 +20,7 @@ class IndexTestCase(AsyncHTTPTestCase, HTTPClientMixin):
     @tornado.testing.gen_test
     def test_admin(self):
         response = yield self.get('/admin/')
+
+        # test going straight to admin re-directs to login
         self.assertTrue('login' in response.effective_url)
 
