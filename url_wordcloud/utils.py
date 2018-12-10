@@ -9,12 +9,33 @@ import hashlib
 # also, i'm not sure what the rationale is to use a salt on an index,
 # the use case is very different to password confirmation.
 # if it is just to show that candidate can salt a hash on the way into the db, then a random salt can be used
-
+import os
 
 from nacl import encoding
 from nacl.public import SealedBox, PrivateKey, PublicKey
 
 SALT = "abcdef1234567890"
+
+
+def generate_keys():
+    # Generate applications public and private key
+    # In practice, these would be set externally and stored outside the repository
+    sk = PrivateKey.generate()
+    pk = sk.public_key
+
+    # write to filesfor access if they don't exist
+    sk_path = os.path.join(os.path.dirname(__file__), "..", "private_key")
+    if not os.path.exists(sk_path):
+        # write as binary
+        with open(sk_path, 'wb') as f:
+            sk_bytes = bytes(sk)
+            f.write(sk_bytes)
+
+    pk_path = os.path.join(os.path.dirname(__file__), "..", "public_key")
+    if not os.path.exists(pk_path):
+        with open(pk_path, 'wb') as f:
+            pk_bytes = bytes(pk)
+            f.write(pk_bytes)
 
 
 def salted_hash(text):
