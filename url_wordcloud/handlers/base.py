@@ -33,7 +33,7 @@ URL_RE = re.compile(r'^((https?|ftp|smtp):\/\/)?(www.)?[a-z0-9]+\.[a-z]+(\/[a-zA
 
 class MainHandler(tornado.web.RequestHandler):
     """
-
+    Homepage handler - for '/'
     """
 
     def get(self):
@@ -47,11 +47,11 @@ class MainHandler(tornado.web.RequestHandler):
 
 class AnalyseURLHandler(SessionMixin, tornado.websocket.WebSocketHandler):
     """
-    Websocket handler
+    Websocket handler - for '/analyse_url/'
      - to receive URL
      - to return word frequency dictionary or error message
 
-    TODO: look at reconnection strategies
+    TODO: look at reconnection strategies for websockets
     """
     pk = None
 
@@ -65,12 +65,13 @@ class AnalyseURLHandler(SessionMixin, tornado.websocket.WebSocketHandler):
 
     async def on_message(self, message):
         """
-        Listen to any messages coming to socket
+        Listen to any messages coming to socket and use url_for_wordcloud parameter if provided
+        to retrieve webpage, and analyse word count
 
-        TODO: split up on_message into smaller functional parts
+        TODO: split up on_message into smaller functional parts and add tests
 
         :param message:
-        :return:
+        :return: word frequency dict, or error message
         """
         logging.info("got message %r", message)
 
@@ -88,8 +89,10 @@ class AnalyseURLHandler(SessionMixin, tornado.websocket.WebSocketHandler):
 
         url_for_wordcloud = parsed["url_for_wordcloud"]
         logging.info("url_for_wordcloud %r", url_for_wordcloud)
+
         if not re.match(URL_RE, url_for_wordcloud):
             logging.info('invalid URL')
+
             # write_error available, with HTTP status codes, not sure with websockets
             self.write_message(json.dumps({
                 'error': 'invalid URL'
@@ -125,8 +128,6 @@ class AnalyseURLHandler(SessionMixin, tornado.websocket.WebSocketHandler):
         if soup:
             # to lower case
             words = soup.get_text().lower()
-            #text_tags = soup.find_all(['div'])
-            #words = ' '.join ([tag.string for tag in text_tags if tag.string is not None]).lower()
 
             # remove punctuation
             words = re.sub(r'[^\w\s]', '', words)
@@ -138,21 +139,15 @@ class AnalyseURLHandler(SessionMixin, tornado.websocket.WebSocketHandler):
             words = re.sub(' +', ' ', words)
 
             # remove stop words (leaving nouns and verbs)
+            # stop words above could be retrieved from ntlk
             words = re.sub(STOP_WORDS_RE, '', words)
-
-            logging.info("words %r", words)
-
-            # TODO alternative if time, and ntlk stop words available
-            # remove articles and prepositions [stop words]
             # stop_words = stopwords.words('english')
             # word_frequency_dict = [word_frequency_dict.pop(k, None) for k in stopwords]
 
-            word_frequency_dict = Counter([word for word in words.split(' ')])
+            logging.info("words %r", words)
 
-            # TODO get this working, not just making single characters
-            # Try to count the words with a memory efficient iterables approach.
-            # map(str.split, page_text) makes a list, items from which are chained together and then counted
-            # word_frequency_dict = Counter(chain.from_iterable(map(methodcaller("split", " "), words)))
+            # split up the string into words, and count how often the occur
+            word_frequency_dict = Counter([word for word in words.split(' ')])
 
             # store the top 100
             top_hundred = word_frequency_dict.most_common(100)
@@ -160,8 +155,6 @@ class AnalyseURLHandler(SessionMixin, tornado.websocket.WebSocketHandler):
 
             with self.make_session() as session:
                 words = []
-                # count = await as_future(session.query(Word).count)
-                # print('{} words so far!'.format(count))
 
                 for word, frequency in top_hundred:
                     pk = salted_hash(word)

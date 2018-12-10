@@ -8,7 +8,7 @@ services:
       - MYSQL_USER=root
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_PORT_3306_TCP_ADDR=mysql
-      - MYSQL_DATABASE=urlwordcloud
+      - MYSQL_DATABASE=test_urlwordcloud
     # connect to mysql db via mysql CLI
     # $ docker exec -it <container_id> mysql -u root -p
 
@@ -17,12 +17,14 @@ services:
       - ./db-dump:/docker-entrypoint-initdb.d
 
   urlwordcloud:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile-test
     environment:
       - "MYSQL_USER=root"
       - "MYSQL_PASSWORD=root"
       - "MYSQL_HOST=mysql"
-      - "MYSQL_DATABASE=urlwordcloud"
+      - "MYSQL_DATABASE=test_urlwordcloud"
     depends_on:
       - mysql-urlwordcloud
     links:
