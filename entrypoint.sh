@@ -13,7 +13,7 @@ done
 echo "DB Connected"
 
 echo "Tornado running (execute run.py)"
-python3 run.py
+python3 run.py --mysqluser=$MYSQL_USER --mysqlpassword=$MYSQL_PASSWORD --mysqlhost=$MYSQL_HOST --mysqldatabase=$MYSQL_DATABASE
 
 
 echo "run.py returned"

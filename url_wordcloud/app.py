@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import logging
 import os
 
 import tornado.web
@@ -8,21 +9,30 @@ from .urls import url_patterns
 
 
 class URLWordCloudApplication(tornado.web.Application):
+    """
+    Application for webpage word cloud analysis
+    """
+    def __init__(self, mysqluser, mysqlpassword, mysqlhost, mysqldatabase):
 
-    def __init__(self):
-        factory = make_session_factory('mysql+mysqldb://urlwordcloud:urlwordcloud@localhost/urlwordcloud')
+        mysql_connection_str = 'mysql+mysqldb://{0}:{1}@{2}/{3}'.format(
+            mysqluser, mysqlpassword, mysqlhost, mysqldatabase
+        )
+        logging.info(mysql_connection_str)
+
+        factory = make_session_factory(mysql_connection_str)
 
         # need pool_recycle option if connecting for longer than 8 hours
         # so would need to update tornado_sqlalchemy (ie fork and contribute)
         # pool_recycle=3600
 
+        # NOT FOR PRODUCTION
         settings = dict(
-            debug=True,             # NOT FOR PRODUCTION
+            debug=True,
             cookie_secret="gB9jYwVv0aodH51judoGwroWP",
             template_path=os.path.join(os.path.dirname(__file__), "templates"),
             static_path=os.path.join(os.path.dirname(__file__), "static"),
-            xsrf_cookies=False,#xsrf_cookies,
+            xsrf_cookies=False,
             session_factory=factory,
-            autoreload=True         # NOT FOR PRODUCTION ?
+            autoreload=True
         )
         super(URLWordCloudApplication, self).__init__(url_patterns, **settings)
