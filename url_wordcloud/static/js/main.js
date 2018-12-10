@@ -1,6 +1,3 @@
-
-
-
 $(document).ready(function() {
     if (!window.console) window.console = {};
     if (!window.console.log) window.console.log = function() {};
@@ -12,6 +9,7 @@ $(document).ready(function() {
         return false;
     });
     $urlform.on("keypress", function(e) {
+        // respond to return / enter key
         if (e.keyCode === 13) {
             newURL($(this));
             return false;
@@ -45,6 +43,8 @@ var updater = {
     start: function() {
         var url = "ws://" + location.host + "/analyse_url/";
         updater.socket = new WebSocket(url);
+
+        // receive messages from webserver
         updater.socket.onmessage = function(event) {
             var message = JSON.parse(event.data);
             var $error_el = $('#sending_error');

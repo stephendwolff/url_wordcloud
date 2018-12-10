@@ -8,9 +8,9 @@ DeclarativeBase = declarative_base()
 class Word(DeclarativeBase):
     """
     Word model
-    pk - is salted hash of the word (so it can be compared, but not read in the plain)
-    word - stored encrypted, with a key generated at start up, which can be read by a private key
-    frequency - as it says on the tin
+    pk: is salted hash of the word (so it can be compared, but not read in the plain)
+    word: stored encrypted, with a key generated at start up, which can be read by a private key
+    frequency: number of instances of word found
     """
     __tablename__ = 'words'
 
