@@ -46,6 +46,7 @@ Encryption is handled by the NaCL library to ensure a high quality of cryptograp
 * Expand admin authentication, beyond simple enter name
 * Implement javascript reconnection strategies for websocket handlers
 * Split up incoming url word count handling, into reusable functional parts
+* Improve punctuation and end-of-line character handling when splitting up words
 * Use ntlk for stopwords (including automatic retrieval of data on app start up)
 * Add wit.ai sentiment analysis, storage and display
 * Improve salted-hashed primary key words, storing random salt with them, instead of hard-coded salt
