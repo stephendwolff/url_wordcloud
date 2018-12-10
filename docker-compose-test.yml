@@ -1,0 +1,37 @@
+version: '3'
+services:
+
+  mysql-urlwordcloud:
+    image: "mariadb:latest"
+
+    environment:
+      - MYSQL_USER=root
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_PORT_3306_TCP_ADDR=mysql
+      - MYSQL_DATABASE=test_urlwordcloud
+    # connect to mysql db via mysql CLI
+    # $ docker exec -it <container_id> mysql -u root -p
+
+    # mount db-dump directory, which contains script to create database, and single table
+    volumes:
+      - ./db-dump:/docker-entrypoint-initdb.d
+
+  urlwordcloud:
+    build:
+      context: .
+      dockerfile: Dockerfile-test
+    environment:
+      - "MYSQL_USER=root"
+      - "MYSQL_PASSWORD=root"
+      - "MYSQL_HOST=mysql"
+      - "MYSQL_DATABASE=test_urlwordcloud"
+    depends_on:
+      - mysql-urlwordcloud
+    links:
+      - mysql-urlwordcloud:mysql
+    ports:
+      - "8888:8888"
+    expose: [8888]
+
+
+# USE external volume if data needs to be persisted
