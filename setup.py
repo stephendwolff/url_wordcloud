@@ -3,6 +3,7 @@
 # -*- coding: utf-8 -*-
 
 import os.path
+from builtins import ImportError, open
 
 try:
     from setuptools import setup
@@ -43,7 +44,7 @@ tests_require = [
     'pytest'
 ]
 
-version = '0.1.0'
+__version__ = '0.1.0'
 
 setup(name='url_wordcloud',
       version=__version__,
