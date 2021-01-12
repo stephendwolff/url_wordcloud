@@ -4,7 +4,7 @@ tornado==6.0.2
 # BeautifulSoup4 for web text scraping.
 # (Consider 'scrapy' for more heavy duty scraping)
 beautifulsoup4==4.7.1
-lxml==4.3.4
+lxml==4.6.2
 
 # natural language processing
 # nltk
