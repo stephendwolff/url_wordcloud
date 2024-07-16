@@ -1,5 +1,5 @@
 # application server
-tornado==6.3.3
+tornado==6.4.1
 
 # BeautifulSoup4 for web text scraping.
 # (Consider 'scrapy' for more heavy duty scraping)
